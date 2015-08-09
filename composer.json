@@ -4,13 +4,20 @@
     "keywords": ["webartisan", "artisan", "laravel", "php"],
     "homepage": "https://github.com/emir/laravel-webartisan",
     "license": "MIT",
-    "version": "0.0.1",
     "authors": [
         {
             "name": "Emir Karşıyakalı",
             "email": "emirkarsiyakali@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Emir\\Webartisan\\": "src/"
+        }
+    },
     "minimum-stability": "dev"
 }

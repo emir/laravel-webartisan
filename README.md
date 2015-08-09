@@ -17,8 +17,11 @@ composer require emir/laravel-webartisan
 After updating composer, because of the security reasons you need to check environment is local. So you can add the ServiceProvider to app/Providers/AppServiceProvider.php like this:
 
 ```php
-if ($this->app->environment('local')) {
-    $this->app->register('Emir\Webartisan\WebartisanServiceProvider');
+public function register()
+{
+	if ($this->app->environment() == 'local') {
+		$this->app->register('Emir\Webartisan\WebartisanServiceProvider');
+	}
 }
 ```
 
