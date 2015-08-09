@@ -11,5 +11,6 @@
             "email": "emirkarsiyakali@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "minimum-stability": "dev"
 }
