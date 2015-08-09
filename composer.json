@@ -1,0 +1,15 @@
+{
+    "name": "emir/laravel-webartisan",
+    "description": "Web artisan allows to run artisan console commands using a browser",
+    "keywords": ["webartisan", "artisan", "laravel", "php"],
+    "homepage": "https://github.com/emir/laravel-webartisan",
+    "license": "MIT",
+    "version": "0.0.1",
+    "authors": [
+        {
+            "name": "Emir Karşıyakalı",
+            "email": "emirkarsiyakali@gmail.com"
+        }
+    ],
+    "require": {}
+}
