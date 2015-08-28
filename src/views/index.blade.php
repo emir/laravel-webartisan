@@ -10,9 +10,9 @@
     <link href="{{ asset('emir/webartisan/webartisan.css') }}" rel="stylesheet"/>
 
     <script>
-    var WebArtisanEndpoint  = "{{ url('webartisan/run') }}";
+    var WebArtisanEndpoint  = "{{ url('artisan/run') }}";
     var exitUrl             = "{{ url() }}";
-    var greetings           = 'Laravel Web Artisan';
+    var greetings           = 'Laravel 5.0 Web Artisan';
     </script>
 </head>
 <body>
