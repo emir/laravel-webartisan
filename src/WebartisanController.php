@@ -2,57 +2,92 @@
 
 namespace Emir\Webartisan;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\View\View;
 
 class WebartisanController extends Controller
 {
     /**
-     * @return \Illuminate\View\View
+     * Display the webartisan terminal.
      */
-    public function index()
+    public function index(): View
     {
-        return view('webartisan::index');
+        $theme = config('webartisan.theme', 'dark');
+
+        return view('webartisan::index', [
+            'theme' => $theme,
+            'version' => Webartisan::VERSION,
+        ]);
     }
 
     /**
-     * @param Request $request
-     *
-     * RPC handler
-     *
-     * @return array
+     * Run an artisan command and return the output.
      */
-    public function actionRpc(Request $request)
+    public function run(Request $request): JsonResponse
     {
-        $options = json_decode($request->getContent());
+        $validated = $request->validate([
+            'command' => ['required', 'string', 'max:1000'],
+        ]);
 
-        switch ($options->method) {
-            case 'artisan':
-                list($status, $output) = $this->runCommand(implode(' ', $options->params));
+        $fullCommand = trim($validated['command']);
+        $commandName = $this->extractCommandName($fullCommand);
 
-                return ['result' => $output];
+        if (! Webartisan::isCommandAllowed($commandName)) {
+            return response()->json([
+                'success' => false,
+                'output' => "Command '{$commandName}' is not allowed.",
+                'exit_code' => 1,
+            ], 403);
+        }
+
+        try {
+            $exitCode = Artisan::call($fullCommand);
+            $output = trim(Artisan::output());
+
+            return response()->json([
+                'success' => $exitCode === 0,
+                'output' => $output,
+                'exit_code' => $exitCode,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'output' => $e->getMessage(),
+                'exit_code' => 1,
+            ], 422);
         }
     }
 
     /**
-     * Runs console command.
-     *
-     * @param string $command
-     *
-     * @return array [status, output]
+     * List all available artisan commands with descriptions.
      */
-    private function runCommand($command)
+    public function commands(): JsonResponse
     {
-        $cmd = base_path("artisan $command 2>&1");
+        $commands = collect(Artisan::all())
+            ->filter(fn ($command, string $name) => Webartisan::isCommandAllowed($name))
+            ->map(fn ($command, string $name) => [
+                'name' => $name,
+                'description' => $command->getDescription(),
+            ])
+            ->sortBy('name')
+            ->values()
+            ->all();
 
-        $handler = popen($cmd, 'r');
-        $output = '';
-        while (!feof($handler)) {
-            $output .= fgets($handler);
-        }
-        $output = trim($output);
-        $status = pclose($handler);
+        return response()->json([
+            'commands' => $commands,
+        ]);
+    }
 
-        return [$status, $output];
+    /**
+     * Extract the base command name from a full command string.
+     */
+    protected function extractCommandName(string $command): string
+    {
+        $parts = preg_split('/\s+/', $command, 2);
+
+        return $parts[0] ?? '';
     }
 }

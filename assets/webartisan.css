@@ -1,3 +1,266 @@
-body {
-    background: black;
+/* ============================================
+   Webartisan - Laravel Terminal Theme System
+   ============================================ */
+
+:root {
+    --wa-bg: #1e1e2e;
+    --wa-fg: #cdd6f4;
+    --wa-accent: #a6e3a1;
+    --wa-accent-dim: #585b70;
+    --wa-error: #f38ba8;
+    --wa-warning: #fab387;
+    --wa-info: #89b4fa;
+    --wa-header-bg: #181825;
+    --wa-header-fg: #bac2de;
+    --wa-cursor: #a6e3a1;
+    --wa-selection: rgba(166, 227, 161, 0.15);
+    --wa-dot-red: #f38ba8;
+    --wa-dot-yellow: #f9e2af;
+    --wa-dot-green: #a6e3a1;
+    --wa-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', 'Consolas', monospace;
+}
+
+[data-theme="light"] {
+    --wa-bg: #eff1f5;
+    --wa-fg: #4c4f69;
+    --wa-accent: #40a02b;
+    --wa-accent-dim: #9ca0b0;
+    --wa-error: #d20f39;
+    --wa-warning: #df8e1d;
+    --wa-info: #1e66f5;
+    --wa-header-bg: #e6e9ef;
+    --wa-header-fg: #5c5f77;
+    --wa-cursor: #40a02b;
+    --wa-selection: rgba(64, 160, 43, 0.15);
+    --wa-dot-red: #d20f39;
+    --wa-dot-yellow: #df8e1d;
+    --wa-dot-green: #40a02b;
+}
+
+[data-theme="monokai"] {
+    --wa-bg: #272822;
+    --wa-fg: #f8f8f2;
+    --wa-accent: #a6e22e;
+    --wa-accent-dim: #75715e;
+    --wa-error: #f92672;
+    --wa-warning: #e6db74;
+    --wa-info: #66d9ef;
+    --wa-header-bg: #1e1f1c;
+    --wa-header-fg: #a59f85;
+    --wa-cursor: #a6e22e;
+    --wa-selection: rgba(166, 226, 46, 0.15);
+    --wa-dot-red: #f92672;
+    --wa-dot-yellow: #e6db74;
+    --wa-dot-green: #a6e22e;
+}
+
+[data-theme="dracula"] {
+    --wa-bg: #282a36;
+    --wa-fg: #f8f8f2;
+    --wa-accent: #50fa7b;
+    --wa-accent-dim: #6272a4;
+    --wa-error: #ff5555;
+    --wa-warning: #f1fa8c;
+    --wa-info: #8be9fd;
+    --wa-header-bg: #21222c;
+    --wa-header-fg: #bd93f9;
+    --wa-cursor: #50fa7b;
+    --wa-selection: rgba(80, 250, 123, 0.15);
+    --wa-dot-red: #ff5555;
+    --wa-dot-yellow: #f1fa8c;
+    --wa-dot-green: #50fa7b;
+}
+
+/* ============================================
+   Base Reset & Layout
+   ============================================ */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--wa-bg);
+    font-family: var(--wa-font);
+}
+
+/* ============================================
+   Header Bar
+   ============================================ */
+
+#webartisan-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 38px;
+    padding: 0 16px;
+    background: var(--wa-header-bg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    user-select: none;
+    -webkit-app-region: drag;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.header-dot.red { background: var(--wa-dot-red); }
+.header-dot.yellow { background: var(--wa-dot-yellow); }
+.header-dot.green { background: var(--wa-dot-green); }
+
+.header-title {
+    margin-left: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--wa-header-fg);
+    letter-spacing: 0.02em;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-env {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--wa-accent);
+    background: rgba(166, 227, 161, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.header-version {
+    font-size: 11px;
+    color: var(--wa-accent-dim);
+}
+
+/* ============================================
+   Terminal Container
+   ============================================ */
+
+#webartisan {
+    height: calc(100vh - 38px);
+    font-size: 14px;
+    line-height: 1.6;
+    --background: var(--wa-bg);
+    --color: var(--wa-fg);
+    --font: var(--wa-font);
+    --size: 14px;
+    --cursor-color: var(--wa-cursor);
+}
+
+/* ============================================
+   jQuery Terminal Overrides
+   ============================================ */
+
+.terminal {
+    padding: 12px 16px;
+}
+
+.terminal .terminal-output > div {
+    padding: 0;
+}
+
+.terminal .terminal-output .format {
+    color: var(--wa-accent);
+}
+
+.terminal .terminal-error {
+    color: var(--wa-error);
+}
+
+.cmd .cmd-cursor .cmd-cursor-line {
+    background-color: var(--wa-cursor);
+    color: var(--wa-bg);
+}
+
+.cmd .cmd-cursor.cmd-blink .cmd-cursor-line {
+    animation: wa-blink 1s steps(1) infinite;
+}
+
+@keyframes wa-blink {
+    0%, 100% {
+        background-color: var(--wa-cursor);
+        color: var(--wa-bg);
+    }
+    50% {
+        background-color: transparent;
+        color: var(--wa-fg);
+    }
+}
+
+.terminal ::selection {
+    background: var(--wa-selection);
+}
+
+.terminal .cmd .cmd-prompt span {
+    font-weight: 700;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+
+.terminal ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.terminal ::-webkit-scrollbar-thumb {
+    background: var(--wa-accent-dim);
+    border-radius: 4px;
+}
+
+.terminal ::-webkit-scrollbar-thumb:hover {
+    background: var(--wa-fg);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+    #webartisan-header {
+        height: 34px;
+        padding: 0 12px;
+    }
+
+    .header-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .header-title {
+        font-size: 12px;
+    }
+
+    #webartisan {
+        height: calc(100vh - 34px);
+        font-size: 12px;
+        --size: 12px;
+    }
+
+    .terminal {
+        padding: 8px 12px;
+    }
 }

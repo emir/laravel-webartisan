@@ -1,23 +1,60 @@
 {
     "name": "emir/laravel-webartisan",
-    "description": "Web artisan allows to run artisan console commands using a browser",
-    "keywords": ["webartisan", "artisan", "laravel", "php"],
+    "description": "A beautiful browser-based terminal to run Laravel Artisan commands",
+    "keywords": [
+        "laravel",
+        "artisan",
+        "terminal",
+        "webartisan",
+        "console",
+        "browser",
+        "devtools"
+    ],
     "homepage": "https://github.com/emir/laravel-webartisan",
     "license": "MIT",
     "authors": [
         {
             "name": "Emir Karşıyakalı",
-            "email": "emirkarsiyakali@gmail.com"
+            "email": "emirkarsiyakali@gmail.com",
+            "homepage": "https://github.com/emir",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "~5.0"
+        "php": "^8.2",
+        "illuminate/console": "^10.0|^11.0|^12.0",
+        "illuminate/http": "^10.0|^11.0|^12.0",
+        "illuminate/routing": "^10.0|^11.0|^12.0",
+        "illuminate/support": "^10.0|^11.0|^12.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "phpunit/phpunit": "^10.5|^11.0"
     },
     "autoload": {
         "psr-4": {
             "Emir\\Webartisan\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "autoload-dev": {
+        "psr-4": {
+            "Emir\\Webartisan\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Emir\\Webartisan\\WebartisanServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
